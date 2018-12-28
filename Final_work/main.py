@@ -11,20 +11,41 @@ Assignment 3 - Relative Distance-Based Formation Control.
 from scipy import linalg as la
 import matplotlib.pyplot as pl
 import numpy as np
+import random
+from math import (radians, degrees, sqrt)
 
 import src.quadrotor as quad
 import src.quadlog as quadlog
 import src.animation as ani
 
 from PlotData import plotGraph
+from obsFormation import formCtl
 
 drPlot = plotGraph(i=0,XYlim=2)
+
+
+tf = 60
+dt = 5e-2
+time = np.linspace(0, tf, tf/dt)
+it = 0
+frames = 100
 
 uavInitPos = np.array([ [1.0,1.2,0.0],\
                         [-1.1,-1.5,0.0],\
                         [1.2,-0.8,0.0],\
                         [-0.6, 1.4,0.0]\
                         ])
+
+side = 1
+sideDiag = sqrt(side**2+side**2)
+
+Bsquare = np.array([    [-1,0,0,1,0], \
+                        [1,-1,0,0,1], \
+                        [0,1,-1,0,0], \
+                        [0,0,1,-1,-1] \
+                        ])
+
+Dsquare = np.array([side, side, side, side, sideDiag])
 
 def initDrones(dronePositions,quantity=4):
     # Quadrotor
@@ -55,14 +76,23 @@ def initDrones(dronePositions,quantity=4):
     for i in range(quantity):
         tmp = quad.quadrotor(i, m, l, J, CDl, CDr, kt, km, kw, \
         att_0, pqr_0, uavInitPos[i], v_ned_0, w_0)
+        # initYaw = random.randint(0,7)*45
         droneSet.append(tmp)
-
     return droneSet
 
 def main():
     agents = initDrones(uavInitPos, 4)
-    drPlot.plotDrone(agents)
-    pl.pause(0)
+    FC = formCtl(Bsquare ,Dsquare, agents, -5)
+    for t in time:
+        XYDist = FC.run()
+        # print(XYDist)
+        for i in range(len(agents)):
+            xyz_D = np.array([XYDist[i,0], XYDist[i,1], -5])
+            agents[i].set_xyz_ned_lya(xyz_D)
+        for uav in agents:
+            uav.step(dt)
+        if it%frames == 0:
+            drPlot.plotDrone(agents)
 
 if __name__ == '__main__':
     main()

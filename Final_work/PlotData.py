@@ -9,17 +9,26 @@ class plotGraph(object):
     def __init__(self, i=0,XYlim=5):
         self.figNum=i
         self.fig = pl.figure(self.figNum)
+        self.XYlim = XYlim
         self.axis3d = self.fig.add_subplot(111,projection='3d')
-        self.axis3d.set_xlim(-XYlim, XYlim)
-        self.axis3d.set_ylim(-XYlim, XYlim)
+        self.setProperties()
+
+    def setProperties(self):
+        self.axis3d.set_xlim(-self.XYlim, self.XYlim)
+        self.axis3d.set_ylim(-self.XYlim, self.XYlim)
         self.axis3d.set_zlim(0, 15)
         self.axis3d.set_xlabel('South [m]')
         self.axis3d.set_ylabel('East [m]')
         self.axis3d.set_zlabel('Up [m]')
 
+
     def plotDrone(self, drones):
-        # self.axis3d.cla()
+        pl.cla()
         i = 0
+        self.fig = pl.figure(self.figNum)
+        self.axis3d = self.fig.add_subplot(111,projection='3d')
+        self.setProperties()
+
         for uav in drones:
             ani.draw3d(self.axis3d, uav.xyz, uav.Rot_bn(),uavColours[i])
             if i != len(uavColours):
@@ -28,5 +37,4 @@ class plotGraph(object):
                 i = 0
         pl.pause(0.001)
         pl.draw()
-
     # def drawGraph(self)
