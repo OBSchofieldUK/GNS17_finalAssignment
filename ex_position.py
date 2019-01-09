@@ -77,7 +77,7 @@ for t in time:
         axis3d.set_title("Time %.3f s" %t)
         pl.pause(0.001)
         pl.draw()
-        
+
 
     # Log
     q1_log.xyz_h[it, :] = q1.xyz
@@ -89,7 +89,7 @@ for t in time:
 
 
     it+=1
-    
+
     # Stop if crash
     if (q1.crashed == 1):
         break
