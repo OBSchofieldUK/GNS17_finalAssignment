@@ -24,72 +24,32 @@ from obsFormation import formCtl
 drPlot = plotGraph(i=0,XYlim=2)
 uavColours = ['r','g','b','k','y','c','m','w']
 
-
-uav1 = []
-uav2 = []
-uav3 = []
-uav4 = []
-uav5 = []
-
 tf = 120
 dt = 5e-2
 time = np.linspace(0, tf, tf/dt)
 it = 0
 frames = 10
 
-# uavInitPos = np.array([ [1.0,1.2,0.0],\
-#                         [-1.1,-1.5,0.0],\
-#                         [1.2,-0.8,0.0],\
-#                         [-0.6, 1.4,0.0]\
-#                         ])
-
-# uavInitPos = np.array([ [-0.1,0,0.0],\
-#                         [1.3,0.2,0.0],\
-#                         [1.0,1,0.0],\
-#                         [0.0, 1.0,0.0]\
-#                         ])
-
-uavInitPos = np.array([ [-0.2,0.1,-0.0],\
-                        [1.2,0.2,-0.0],\
-                        [1.2,1.0,-0.0],\
-                        [0.0, 1.0,-0.0]\
+uavInitPos = np.array([ [-0.1,0,0.0],\
+                        [1.3,0.2,0.0],\
+                        [1.0,1,0.0],\
+                        [0.0, 1.0,0.0]\
                         ])
 
-uavInitPos = np.array([ [-0.2,0.1,-0.0],\
-                        [1.2,0.2,-0.0],\
-                        [1.2,1.0,-0.0],\
-                        [0.0, 1.0,-0.0],\
-                        [0.5, 1.5,-0.0],\
-                        ])
 
-side = 1
+side = 1.0
 sideDiag = sqrt(side**2+side**2)
-#
-# Bsquare = np.array([    [1,0,0,-1,0,1], \
-#                         [-1,1,0,0,-1,0], \
-#                         [0,-1,1,0,0,-1], \
-#                         [0,0,-1,1,1,0] \
-#                         ])
 
 Bsquare = np.array([    [1,0,0,-1,0], \
                         [-1,1,0,0,-1], \
                         [0,-1,1,0,0], \
                         [0,0,-1,1,1] \
                         ])
-BHouse = np.array([    [1,0,0,-1,0,0,0], \
-                        [-1,1,0,0,-1,0,0], \
-                        [0,-1,1,0,0,0,1], \
-                        [0,0,-1,1,1,1,0], \
-                        [0,0,0,0,0,-1,-1]\
-                        ])
 
 Dsquare = np.array([side, side, side, side, sideDiag])
-Dhouse = np.array([side, side, side, side, sideDiag,side,side])
 
 Btriang = np.array([[1, 0, -1],[-1, 1, 0],[0, -1, 1]])
 dtriang = np.array([side, side, side])
-
-
 
 
 def initDrones(dronePositions,quantity=4):
@@ -164,10 +124,10 @@ def checkCrash(drones):
 
 def main():
     it = 0
-    agents, agentLog = initDrones(uavInitPos, 5)
+    agents, agentLog = initDrones(uavInitPos, 4)
     # FC = formCtl(Btriang ,dtriang, agents, -5)
     # FC = formCtl(Bsquare, Dsquare, agents, 0.1, 2)
-    FC = formCtl(BHouse, Dhouse, agents, 0.2,2)
+    FC = formCtl(Bsquare, Dsquare, agents, 0.2,2)
 
     pl.close("all")
     pl.ion()
@@ -206,10 +166,6 @@ def main():
     for uavLogs in agentLog:
         tmp = matReconfig(uavLogs)
         matLogs.append(tmp)
-    # uavA = matReconfig(uav1)
-    # uavB = matReconfig(uav2)
-    # uavC = matReconfig(uav3)
-    # uavD = matReconfig(uav4)
 
     # Plot errors
     pl.figure(1)
@@ -217,10 +173,6 @@ def main():
     for i in range(datWid):
         pl.plot(data[:, i], color=uavColours[i], label='q'+str(i+1))
 
-    # pl.plot(data[:, 0], color='r', label='q1')
-    # pl.plot(data[:, 1], color='g', label='q2')
-    # pl.plot(data[:, 2], color='b', label='q3')
-    # pl.plot(data[:, 3], color='y', label='q4')
     pl.xlabel('iterations')
     pl.ylabel('offset (M)')
     pl.legend()

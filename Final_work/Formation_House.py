@@ -49,11 +49,11 @@ frames = 10
 #                         [0.0, 1.0,0.0]\
 #                         ])
 
-uavInitPos = np.array([ [-0.2,0.1,-0.0],\
-                        [1.2,0.2,-0.0],\
-                        [1.2,1.0,-0.0],\
-                        [0.0, 1.0,-0.0]\
-                        ])
+# uavInitPos = np.array([ [-0.2,0.1,-0.0],\
+#                         [1.2,0.2,-0.0],\
+#                         [1.2,1.0,-0.0],\
+#                         [0.0, 1.0,-0.0]\
+#                         ])
 
 uavInitPos = np.array([ [-0.2,0.1,-0.0],\
                         [1.2,0.2,-0.0],\
@@ -62,7 +62,7 @@ uavInitPos = np.array([ [-0.2,0.1,-0.0],\
                         [0.5, 1.5,-0.0],\
                         ])
 
-side = 1
+side = 1.5
 sideDiag = sqrt(side**2+side**2)
 #
 # Bsquare = np.array([    [1,0,0,-1,0,1], \
@@ -167,7 +167,7 @@ def main():
     agents, agentLog = initDrones(uavInitPos, 5)
     # FC = formCtl(Btriang ,dtriang, agents, -5)
     # FC = formCtl(Bsquare, Dsquare, agents, 0.1, 2)
-    FC = formCtl(BHouse, Dhouse, agents, 0.2,2)
+    FC = formCtl(BHouse, Dhouse, agents, 0.15,2)
 
     pl.close("all")
     pl.ion()
