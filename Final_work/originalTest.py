@@ -125,9 +125,7 @@ def checkCrash(drones):
 def main():
     it = 0
     agents, agentLog = initDrones(uavInitPos, 4)
-    # FC = formCtl(Btriang ,dtriang, agents, -5)
-    # FC = formCtl(Bsquare, Dsquare, agents, 0.1, 2)
-    FC = formCtl(Bsquare, Dsquare, agents, 0.2,2)
+    FC = formCtl(Bsquare, Dsquare, agents, 1 ,2)
 
     pl.close("all")
     pl.ion()
@@ -135,7 +133,7 @@ def main():
 
     axis3d = fig.add_subplot(111, projection='3d')
     pl.figure(0)
-
+    FC.atAltitude = True
     for t in time:
 
         FC.run()
@@ -169,18 +167,19 @@ def main():
 
     # Plot errors
     pl.figure(1)
-    pl.title('error per iteration')
+    # pl.subplot(1,1,1)
+    pl.title('Error Per Step')
     for i in range(datWid):
-        pl.plot(data[:, i], color=uavColours[i], label='q'+str(i+1))
-
-    pl.xlabel('iterations')
+        pl.plot( data[:, i], color=uavColours[i], label='E'+str(i+1))
+    pl.xlabel('Iteration')
     pl.ylabel('offset (M)')
     pl.legend()
 
-
+    pl.savefig('img/1_errorPerIter',format="svg")
     # Plot Movement
 
-    pl.figure(2)
+    pl.figure( 2)
+    # pl.subplot(2,2,2)
     pl.title("2D Position [m]")
     j = 0
     for uav in matLogs:
@@ -210,6 +209,7 @@ def main():
     pl.ylabel("South")
     pl.legend()
     pl.grid()
+    pl.savefig('img/1_FormationPositions',format="svg")
     pl.pause(0)
 if __name__ == '__main__':
     main()

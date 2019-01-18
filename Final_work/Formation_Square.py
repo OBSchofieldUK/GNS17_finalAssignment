@@ -50,13 +50,19 @@ frames = 10
 
 uavInitPos = np.array([ [-0.2,0.1,-0.0],\
                         [1.2,0.2,-0.0],\
-                        [1.2,0.8,-0.0],\
-                        [-0.2, 1.3,-0.0],\
+                        [1.2,1.0,-0.0],\
+                        [0.0, 1.0,-0.0],\
                         [0.5, 1.5,-0.0],\
                         ])
 
-side = 1.5
+side = 1
 sideDiag = sqrt(side**2+side**2)
+#
+# Bsquare = np.array([    [1,0,0,-1,0,1], \
+#                         [-1,1,0,0,-1,0], \
+#                         [0,-1,1,0,0,-1], \
+#                         [0,0,-1,1,1,0] \
+#                         ])
 
 Bsquare = np.array([    [1,0,0,-1,0], \
                         [-1,1,0,0,-1], \
@@ -75,6 +81,7 @@ Dhouse = np.array([side, side, side, side, sideDiag,side,side])
 
 Btriang = np.array([[1, 0, -1],[-1, 1, 0],[0, -1, 1]])
 dtriang = np.array([side, side, side])
+
 
 def initDrones(dronePositions,quantity=4):
     # Quadrotor
@@ -148,9 +155,9 @@ def checkCrash(drones):
 
 def main():
     it = 0
-    agents, agentLog = initDrones(uavInitPos, 5)
-    # FC = formCtl(Bsquare, Dsquare, agents, 0.15, 2)
-    FC = formCtl(BHouse, Dhouse, agents, 0.08,2)
+    agents, agentLog = initDrones(uavInitPos, 4)
+    FC = formCtl(Bsquare, Dsquare, agents, 0.15, 2)
+    # FC = formCtl(BHouse, Dhouse, agents, 0.15,2)
 
     pl.close("all")
     pl.ion()
@@ -170,13 +177,13 @@ def main():
             i += 1
 
         if it%frames==0 and FC.atAltitude:
-            plotDrones(axis3d, agents, t)
+            # plotDrones(axis3d, agents, t)
             pass
         it+=1
 
         if checkCrash(agents):
             break
-    # plotDrones(axis3d, agents, t)
+    plotDrones(axis3d, agents, t)
 
     # Error Data from the Flight Controller
     data = FC.errLog
@@ -199,7 +206,7 @@ def main():
     pl.xlabel('Iteration')
     pl.ylabel('offset (M)')
     pl.legend()
-    pl.savefig('img/2_House_errorPerIter',format="svg")
+    pl.savefig('img/2_Square_errorPerIter',format="svg")
 
     # Plot Movement
     pl.figure(2)
@@ -232,7 +239,7 @@ def main():
     pl.ylabel("South")
     pl.legend()
     pl.grid()
-    pl.savefig('img/2_House_FormationPositions',format="svg")
+    pl.savefig('img/2_Square_FormationPositions',format="svg")
     pl.pause(0)
 if __name__ == '__main__':
     main()
