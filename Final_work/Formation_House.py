@@ -55,7 +55,7 @@ uavInitPos = np.array([ [-0.2,0.1,-0.0],\
                         [0.5, 1.5,-0.0],\
                         ])
 
-side = 1.5
+side = 1.75
 sideDiag = sqrt(side**2+side**2)
 
 Bsquare = np.array([    [1,0,0,-1,0], \

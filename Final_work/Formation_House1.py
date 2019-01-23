@@ -140,7 +140,7 @@ def plotFormation(FC, time ):
     pl.figure(2)
     pl.clf()
     pl.title("2D Position [m] at %.2f s" % time)
-    pl.grid()
+
     for a in range(FC.numAgents):
         pl.scatter(FC.dronePositions[a,0], FC.dronePositions[a,1],color=uavColours[a], marker='*',s=200, label='q'+str(a+1))
     for j in range(FC.numEdges):
@@ -159,14 +159,18 @@ def plotFormation(FC, time ):
             y2 = FC.dronePositions[edgeTail,1]
             # print(x1, x2)
             pl.plot([x1,x2],[y1,y2],'r--',lw=2)
+    pl.axis('equal')
+    pl.xlabel("East")
+    pl.ylabel("South")
     pl.legend()
+    pl.grid()
     pl.pause(0.001)
     pl.draw()
 
 def main():
     it = 0
-    agents, agentLog = initDrones(uavInitPos, 4)
-    FC = formCtl(Bsquare, Dsquare, agents, 0.1, 2)
+    agents, agentLog = initDrones(uavInitPos, 5)
+    FC = formCtl(BHouse, Dhouse, agents, 0.1, 2)
     # FC = formCtl(BHouse, Dhouse, agents, 0.15,2)
 
     pl.close("all")
@@ -217,8 +221,6 @@ def main():
     pl.xlabel('Iteration')
     pl.ylabel('offset (M)')
     pl.legend()
-    # line_ani = animation.FuncAnimation(fig, update_lines, 25, fargs=(data, lines),
-    #                                interval=50, blit=False)
 
     pl.savefig('img/2_Square_errorPerIter',format="svg")
 
